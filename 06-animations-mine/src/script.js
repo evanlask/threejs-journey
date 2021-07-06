@@ -1,6 +1,7 @@
 import * as THREE from 'three';
+import gsap from 'gsap';
 
-import './style.css'
+import './style.css';
 
 // Dimensions
 const size = {
@@ -29,4 +30,56 @@ const renderer = new THREE.WebGLRenderer({
   canvas,
 });
 renderer.setSize(size.width, size.height);
-renderer.render(scene, camera);
+
+// Animation - Time
+// let time = Date.now();
+
+// const tick = () => {
+//   // Time
+//   const currentTime = Date.now();
+//   const deltaTime = currentTime - time;
+//   time = currentTime;
+//
+//   // Update object position
+//   mesh.rotation.y += 0.001 * deltaTime;
+//
+//   // Render
+//   renderer.render(scene, camera);
+//
+//   window.requestAnimationFrame(tick);
+// };
+
+// Animation - Clock
+// const clock = new THREE.Clock();
+
+// const tick = () => {
+//   const elapsedTime = clock.getElapsedTime();
+
+//   // Update object position
+//   // mesh.rotation.y = elapsedTime * Math.PI * 2;
+//   // mesh.position.x = Math.cos(elapsedTime);
+//   // mesh.position.y = Math.sin(elapsedTime);
+//   camera.position.x = Math.cos(elapsedTime);
+//   camera.position.y = Math.sin(elapsedTime);
+//   camera.lookAt(mesh.position);
+
+//   // Render
+//   renderer.render(scene, camera);
+
+//   window.requestAnimationFrame(tick);
+// };
+
+// Animation - Library
+gsap.to(mesh.position, {
+  ease: 'elastic.out(1)',
+  delay: 1,
+  duration: 1,
+  x: 2,
+});
+
+const tick = () => {
+  renderer.render(scene, camera);
+  window.requestAnimationFrame(tick);
+};
+
+tick();

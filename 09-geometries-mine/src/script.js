@@ -22,13 +22,26 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 // Scene
 const scene = new THREE.Scene();
 
-// Cube
-const mesh = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
-  new THREE.MeshBasicMaterial({
-    color: 0xff0000,
-  })
-);
+// Geometry
+const geometry = new THREE.BufferGeometry();
+
+const count = 10000;
+const positionsArray = new Float32Array(count * 3 * 3);
+
+for (let i = 0; i < positionsArray.length; i++) {
+  positionsArray[i] = (Math.random() - 0.5) * 2;
+}
+
+const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
+geometry.setAttribute('position', positionsAttribute);
+
+const material = new THREE.MeshBasicMaterial({
+  color: 0xff0000,
+  wireframe: true,
+});
+
+const mesh = new THREE.Mesh(geometry, material);
+
 scene.add(mesh);
 
 // Camera

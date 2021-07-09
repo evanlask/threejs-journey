@@ -26,7 +26,7 @@ fontLoader.load('/fonts/gentilis_bold.typeface.json', (font) => {
   const bevelSize = 0.01;
   const bevelThickness = 0.01;
 
-  const textGeometry = new THREE.TextGeometry('PEW PEW!!!', {
+  const textGeometry = new THREE.TextGeometry('Mmm… Donuts!', {
     font: font,
     size: 0.5,
     height: 0.2,

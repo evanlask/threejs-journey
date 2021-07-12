@@ -1,6 +1,7 @@
 import * as dat from 'dat.gui';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper';
 
 import './style.css';
 
@@ -26,15 +27,50 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 // Scene
 const scene = new THREE.Scene();
 
+// Axes Helper
+// const axesHelper = new THREE.AxesHelper(10);
+// scene.add(axesHelper);
+
 // Lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
 
-const pointLight = new THREE.PointLight(0xffffff, 0.5);
-pointLight.position.x = 2;
-pointLight.position.y = 3;
-pointLight.position.z = 4;
+const directionalLight = new THREE.DirectionalLight(0x00fffc, 0.5);
+directionalLight.position.set(1, 0.25, 0);
+scene.add(directionalLight);
+const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.1);
+scene.add(directionalLightHelper);
+
+// color top, color bottom, intensity
+const hemisphereLight = new THREE.HemisphereLight(0xff0000, 0x0000ff, 0.3);
+scene.add(hemisphereLight);
+const hemisphereLightHelper = new THREE.HemisphereLightHelper(hemisphereLight, 0.1);
+scene.add(hemisphereLightHelper);
+
+// color, intensity
+const pointLight = new THREE.PointLight(0xff9000, 0.5);
+pointLight.position.set(1, -0.5, 1);
+pointLight.distance = 3;
 scene.add(pointLight);
+const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.1);
+scene.add(pointLightHelper);
+
+// color, intensity, width, height
+const rectAreaLight = new THREE.RectAreaLight(0x4e00ff, 2, 1, 1);
+rectAreaLight.position.set(-1.5, 0, 1.5);
+rectAreaLight.lookAt(new THREE.Vector3());
+scene.add(rectAreaLight);
+const rectAreaLightHelper = new RectAreaLightHelper(rectAreaLight);
+scene.add(rectAreaLightHelper);
+
+// color, intensity, distance, angle, penumbra (soft edge), decay
+const spotLight = new THREE.SpotLight(0x78ff00, 0.5, 6, Math.PI * 0.1, 0.25, 1);
+spotLight.position.set(0, 2, 3);
+scene.add(spotLight);
+// scene.add(spotLight.target);
+// spotLight.target.position.x = 0.75;
+const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+scene.add(spotLightHelper);
 
 // Objects
 const material = new THREE.MeshStandardMaterial();

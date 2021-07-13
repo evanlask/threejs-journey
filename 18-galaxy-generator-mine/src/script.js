@@ -5,7 +5,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import './style.css';
 
 // Debug
-const gui = new dat.GUI();
+const gui = new dat.GUI({
+  width: 400,
+});
 
 // Textures
 const textureLoader = new THREE.TextureLoader();
@@ -36,8 +38,53 @@ const axesHelper = new THREE.AxesHelper(10);
 scene.add(axesHelper);
 
 // Cube
-const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
-scene.add(cube);
+// const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
+// scene.add(cube);
+
+// Galaxy
+const parameters = {
+  count: 1000,
+  size: 0.02,
+};
+
+let geometry = null;
+let material = null;
+let points = null;
+
+const generateGalaxy = () => {
+  if (points !== null) {
+    geometry.dispose();
+    material.dispose();
+    scene.remove(points);
+  }
+
+  geometry = new THREE.BufferGeometry();
+  const vertices = new Float32Array(parameters.count * 3);
+
+  for (let i = 0; i < parameters.count / 3; i++) {
+    const i3 = i * 3;
+
+    vertices[i3 + 0] = (Math.random() - 0.5) * 3; // x
+    vertices[i3 + 1] = (Math.random() - 0.5) * 3; // y
+    vertices[i3 + 2] = (Math.random() - 0.5) * 3; // z
+  }
+
+  geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+  material = new THREE.PointsMaterial();
+  material.size = parameters.size;
+  material.sizeAttenuation = true;
+  material.depthWrite = false;
+  material.blending = THREE.AdditiveBlending;
+
+  points = new THREE.Points(geometry, material);
+  scene.add(points);
+};
+
+generateGalaxy();
+
+gui.add(parameters, 'count').min(100).max(100000).step(100).onFinishChange(generateGalaxy);
+gui.add(parameters, 'size').min(0.001).max(0.1).step(0.001).onFinishChange(generateGalaxy);
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.05, 100);

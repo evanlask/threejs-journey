@@ -196,6 +196,7 @@ for (let i = 0; i < 50; i++) {
   grave.rotation.z = (Math.random() - 0.5) * 0.2;
 
   grave.castShadow = true;
+  grave.receiveShadow = true;
 
   graveyard.add(grave);
 }

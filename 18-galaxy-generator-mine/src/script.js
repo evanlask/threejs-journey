@@ -42,6 +42,10 @@ const scene = new THREE.Scene();
 // const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
 // scene.add(cube);
 
+// Fog
+const fog = new THREE.Fog('#000000', 1, 20);
+scene.fog = fog;
+
 // Galaxy
 const parameters = {
   branches: 4,

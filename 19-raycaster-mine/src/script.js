@@ -1,8 +1,14 @@
 import * as dat from 'dat.gui';
+import * as Stats from 'stats.js';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import './style.css';
+
+// Stats
+var stats = new Stats();
+stats.showPanel(0);
+document.body.appendChild(stats.dom);
 
 // Debug
 const gui = new dat.GUI();
@@ -72,6 +78,9 @@ controls.enableDamping = true;
 const clock = new THREE.Clock();
 
 const tick = () => {
+  // Debug stats
+  stats.begin();
+
   const elapsedTime = clock.getElapsedTime();
 
   // Update controls
@@ -79,6 +88,9 @@ const tick = () => {
 
   // Render
   renderer.render(scene, camera);
+
+  // Debug stats
+  stats.end();
 
   // Call tick again on the next frame
   window.requestAnimationFrame(tick);

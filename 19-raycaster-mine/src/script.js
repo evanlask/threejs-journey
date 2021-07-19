@@ -23,6 +23,30 @@ const size = {
 };
 let aspectRatio = size.width / size.height;
 
+// Mouse
+const mouse = new THREE.Vector2();
+
+window.addEventListener('mousemove', (e) => {
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+});
+
+window.addEventListener('click', (e) => {
+  if (currentIntersect) {
+    switch (currentIntersect.object) {
+      case object1:
+        console.log('click on object 1');
+        break;
+      case object2:
+        console.log('click on object 2');
+        break;
+      case object3:
+        console.log('click on object 3');
+        break;
+    }
+  }
+});
+
 // Renderer
 const canvas = document.querySelector('.webgl');
 const renderer = new THREE.WebGLRenderer({
@@ -38,12 +62,15 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const scene = new THREE.Scene();
 
 // Axes Helper
-const axesHelper = new THREE.AxesHelper(10);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(10);
+// scene.add(axesHelper);
 
 // Grid Helper
-const gridHelper = new THREE.GridHelper(20, 20);
-scene.add(gridHelper);
+const gridHelperX = new THREE.GridHelper(20, 20);
+scene.add(gridHelperX);
+const gridHelperY = new THREE.GridHelper(20, 20);
+gridHelperY.rotation.x = Math.PI * 0.5;
+scene.add(gridHelperY);
 
 // Objects
 const object1 = new THREE.Mesh(
@@ -65,6 +92,21 @@ object3.position.x = 2;
 
 scene.add(object1, object2, object3);
 
+// Raycaster
+const raycaster = new THREE.Raycaster();
+
+// const rayOrigin = new THREE.Vector3(-3, 10, 0);
+// const rayDirection = new THREE.Vector3(10, 0, 0);
+// rayDirection.normalize();
+
+// raycaster.set(rayOrigin, rayDirection);
+
+// const intersect = raycaster.intersectObject(object2);
+// console.log(intersect);
+
+// const intersects = raycaster.intersectObjects([object1, object2, object3]);
+// console.log(intersects);
+
 // Camera
 const camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.05, 100);
 camera.position.z = 3;
@@ -76,12 +118,63 @@ controls.enableDamping = true;
 
 // Animate
 const clock = new THREE.Clock();
+let currentIntersect = null;
 
 const tick = () => {
   // Debug stats
   stats.begin();
 
   const elapsedTime = clock.getElapsedTime();
+
+  // Animate objects
+  object1.position.y = Math.sin(elapsedTime) * 1.5;
+  object2.position.y = Math.sin(elapsedTime * 0.8) * 1.5;
+  object3.position.y = Math.sin(elapsedTime * 1.5) * 1.5;
+
+  // Cast a ray
+  raycaster.setFromCamera(mouse, camera);
+
+  const objectsToTest = [object1, object2, object3];
+  const intersects = raycaster.intersectObjects(objectsToTest);
+
+  if (intersects.length) {
+    if (!currentIntersect) {
+      console.log('mouse enter');
+    }
+
+    currentIntersect = intersects[0];
+  } else {
+    if (currentIntersect) {
+      console.log('mouse leave');
+    }
+
+    currentIntersect = null;
+  }
+
+  objectsToTest.forEach((object) => {
+    object.material.color.set('#ff0000');
+  });
+
+  intersects.forEach((intersect) => {
+    intersect.object.material.color.set('#0000ff');
+  });
+
+  // const rayOrigin = new THREE.Vector3(-3, 0, 0);
+  // const rayDirection = new THREE.Vector3(10, 0, 0);
+  // rayDirection.normalize();
+
+  // raycaster.set(rayOrigin, rayDirection);
+
+  // const objectsToTest = [object1, object2, object3];
+  // const intersects = raycaster.intersectObjects(objectsToTest);
+
+  // objectsToTest.forEach((object) => {
+  //   object.material.color.set('#ff0000');
+  // });
+
+  // intersects.forEach((intersect) => {
+  //   intersect.object.material.color.set('#0000ff');
+  // });
 
   // Update controls
   controls.update();

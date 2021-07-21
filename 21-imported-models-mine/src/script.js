@@ -1,6 +1,9 @@
 import * as dat from 'dat.gui';
 import * as Stats from 'stats.js';
 import * as THREE from 'three';
+
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import './style.css';
@@ -47,6 +50,34 @@ scene.add(axesHelper);
 // const gridHelperY = new THREE.GridHelper(20, 20);
 // gridHelperY.rotation.x = Math.PI * 0.5;
 // scene.add(gridHelperY);
+
+// Models
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('/draco/');
+
+let mixer = null;
+
+const gltfLoader = new GLTFLoader();
+gltfLoader.setDRACOLoader(dracoLoader);
+
+gltfLoader.load('/models/Fox/glTF/Fox.gltf', (gltf) => {
+  console.log(gltf);
+
+  mixer = new THREE.AnimationMixer(gltf.scene);
+  const action = mixer.clipAction(gltf.animations[2]);
+
+  action.play();
+
+  gltf.scene.scale.set(0.025, 0.025, 0.025);
+  scene.add(gltf.scene);
+
+  // while (gltf.scene.children.length > 0) {
+  //   scene.add(gltf.scene.children[0]);
+  // }
+
+  // const children = [...gltf.scene.children];
+  // children.forEach((child) => scene.add(child));
+});
 
 // Floor
 const floor = new THREE.Mesh(
@@ -98,6 +129,11 @@ const tick = () => {
   const elapsedTime = clock.getElapsedTime();
   const deltaElapsedTime = elapsedTime - lastElapsedTime;
   lastElapsedTime = elapsedTime;
+
+  // Update mixer
+  if (mixer) {
+    mixer.update(deltaElapsedTime);
+  }
 
   // Update controls
   controls.update();

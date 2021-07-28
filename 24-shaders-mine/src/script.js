@@ -4,6 +4,9 @@ import * as THREE from 'three';
 
 import './style.css';
 
+import vertexShader from './shaders/vertex.glsl';
+import fragmentShader from './shaders/fragment.glsl';
+
 // Debug
 const gui = new dat.GUI();
 
@@ -39,7 +42,11 @@ scene.add(axesHelper);
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32);
 
 // Material
-const material = new THREE.MeshBasicMaterial();
+const material = new THREE.RawShaderMaterial({
+  vertexShader,
+  fragmentShader,
+  // wireframe: true,
+});
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);

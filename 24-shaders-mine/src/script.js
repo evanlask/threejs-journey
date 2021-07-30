@@ -55,7 +55,7 @@ const geometry = new THREE.PlaneGeometry(1, 1, 64, 64);
 // console.log(geometry.attributes);
 
 // Material
-const material = new THREE.RawShaderMaterial({
+const material = new THREE.ShaderMaterial({
   vertexShader,
   fragmentShader,
   // wireframe: true,

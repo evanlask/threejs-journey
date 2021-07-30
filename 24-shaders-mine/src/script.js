@@ -61,6 +61,7 @@ const material = new THREE.ShaderMaterial({
   // wireframe: true,
   side: THREE.DoubleSide,
   uniforms: {
+    uAmplitude: { value: 0.1 },
     uColor: { value: new THREE.Color('salmon') },
     uFrequency: { value: new THREE.Vector2(10, 5) },
     uTexture: { value: flagTexture },
@@ -68,6 +69,7 @@ const material = new THREE.ShaderMaterial({
   },
 });
 
+gui.add(material.uniforms.uAmplitude, 'value').min(0).max(0.2).step(0.001).name('amplitude');
 gui.add(material.uniforms.uFrequency.value, 'x').min(0).max(20).step(0.01).name('frequencyX');
 gui.add(material.uniforms.uFrequency.value, 'y').min(0).max(20).step(0.01).name('frequencyY');
 

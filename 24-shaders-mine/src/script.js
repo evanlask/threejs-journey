@@ -41,11 +41,24 @@ scene.add(axesHelper);
 // Geometry
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32);
 
+const count = geometry.attributes.position.count;
+const randoms = new Float32Array(count);
+
+for (let i = 0; i < count; i++) {
+  randoms[i] = Math.random();
+}
+
+geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1));
+
+console.log(geometry.attributes);
+
 // Material
 const material = new THREE.RawShaderMaterial({
   vertexShader,
   fragmentShader,
   // wireframe: true,
+  side: THREE.DoubleSide,
+  transparent: true,
 });
 
 // Mesh

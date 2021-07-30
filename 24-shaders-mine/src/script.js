@@ -13,6 +13,8 @@ const gui = new dat.GUI();
 // Textures
 const textureLoader = new THREE.TextureLoader();
 
+const flagTexture = textureLoader.load('/textures/flag-french.jpg');
+
 // Dimensions
 const size = {
   width: window.innerWidth,
@@ -39,18 +41,18 @@ const axesHelper = new THREE.AxesHelper(10);
 scene.add(axesHelper);
 
 // Geometry
-const geometry = new THREE.PlaneGeometry(1, 1, 32, 32);
+const geometry = new THREE.PlaneGeometry(1, 1, 64, 64);
 
-const count = geometry.attributes.position.count;
-const randoms = new Float32Array(count);
+// const count = geometry.attributes.position.count;
+// const randoms = new Float32Array(count);
 
-for (let i = 0; i < count; i++) {
-  randoms[i] = Math.random();
-}
+// for (let i = 0; i < count; i++) {
+//   randoms[i] = Math.random();
+// }
 
-geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1));
+// geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1));
 
-console.log(geometry.attributes);
+// console.log(geometry.attributes);
 
 // Material
 const material = new THREE.RawShaderMaterial({
@@ -58,11 +60,20 @@ const material = new THREE.RawShaderMaterial({
   fragmentShader,
   // wireframe: true,
   side: THREE.DoubleSide,
-  transparent: true,
+  uniforms: {
+    uColor: { value: new THREE.Color('salmon') },
+    uFrequency: { value: new THREE.Vector2(10, 5) },
+    uTexture: { value: flagTexture },
+    uTime: { value: 0 },
+  },
 });
+
+gui.add(material.uniforms.uFrequency.value, 'x').min(0).max(20).step(0.01).name('frequencyX');
+gui.add(material.uniforms.uFrequency.value, 'y').min(0).max(20).step(0.01).name('frequencyY');
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);
+mesh.scale.y = 2 / 3;
 scene.add(mesh);
 
 // Camera
@@ -83,6 +94,9 @@ const tick = () => {
   const elapsedTime = clock.getElapsedTime();
   const deltaElapsedTime = elapsedTime - lastElapsedTime;
   lastElapsedTime = elapsedTime;
+
+  // Update uniform
+  material.uniforms.uTime.value = elapsedTime;
 
   // Update controls
   controls.update();

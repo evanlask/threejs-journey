@@ -189,13 +189,20 @@ float random(vec2 st) {
 // }
 
 // Pattern 25
-void main() {
-    vec2 gridUv = vec2(
-        floor(vUv.x * 10.0) / 10.0,
-        floor(vUv.y * 10.0 + vUv.x * 5.0) / 10.0
-    );
+// void main() {
+//     vec2 gridUv = vec2(
+//         floor(vUv.x * 10.0) / 10.0,
+//         floor(vUv.y * 10.0 + vUv.x * 5.0) / 10.0
+//     );
 
-    float strength = random(gridUv);
+//     float strength = random(gridUv);
+
+//     gl_FragColor = vec4(vec3(strength), 1.0);
+// }
+
+// Pattern 26
+void main() {
+    float strength = length(vUv);
 
     gl_FragColor = vec4(vec3(strength), 1.0);
 }

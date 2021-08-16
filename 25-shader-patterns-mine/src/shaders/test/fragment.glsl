@@ -223,8 +223,20 @@ float random(vec2 st) {
 // }
 
 // Pattern 29
+// void main() {
+//     float strength = 0.015 / distance(vUv, vec2(0.5));
+
+//     gl_FragColor = vec4(vec3(strength), 1.0);
+// }
+
+// Pattern 30
 void main() {
-    float strength = 0.015 / distance(vUv, vec2(0.5));
+    float strength = 0.15 / (
+        distance(
+            vec2(vUv.x, (vUv.y - 0.5) * 5.0 + 0.5),
+            vec2(0.5)
+        )
+    );
 
     gl_FragColor = vec4(vec3(strength), 1.0);
 }

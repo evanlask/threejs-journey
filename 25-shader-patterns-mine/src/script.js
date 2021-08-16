@@ -20,7 +20,7 @@ let aspectRatio = size.width / size.height;
 // Renderer
 const canvas = document.querySelector('.webgl');
 const renderer = new THREE.WebGLRenderer({
-  antialias: true,
+  // antialias: true,
   canvas,
 });
 renderer.setSize(size.width, size.height);

@@ -134,8 +134,17 @@ varying vec2 vUv;
 // }
 
 // Pattern 19
+// void main() {
+//     float strength = step(0.2, max(abs(vUv.x - 0.5), abs(vUv.y - 0.5)));
+
+//     gl_FragColor = vec4(vec3(strength), 1.0);
+// }
+
+// Pattern 20
 void main() {
-    float strength = step(0.2, max(abs(vUv.x - 0.5), abs(vUv.y - 0.5)));
+    float squareOne = step(0.2, max(abs(vUv.x - 0.5), abs(vUv.y - 0.5)));
+    float squareTwo = 1.0 - step(0.25, max(abs(vUv.x - 0.5), abs(vUv.y - 0.5)));
+    float strength = squareOne * squareTwo;
 
     gl_FragColor = vec4(vec3(strength), 1.0);
 }

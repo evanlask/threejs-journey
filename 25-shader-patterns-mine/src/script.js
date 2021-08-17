@@ -35,14 +35,24 @@ scene.add(axesHelper);
 
 // Geometry
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32);
-// const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+// const geometry = new THREE.SphereGeometry(1, 32, 16);
 
 // Material
 const material = new THREE.ShaderMaterial({
   vertexShader: testVertexShader,
   fragmentShader: testFragmentShader,
   side: THREE.DoubleSide,
+  uniforms: {
+    uAmplitude: { value: 20.0 },
+    uFrequency: { value: 10.0 },
+    uLimit: { value: 0.9 },
+    uTime: { value: 0 },
+  },
 });
+
+gui.add(material.uniforms.uAmplitude, 'value').min(0).max(100).step(0.1).name('amplitude');
+gui.add(material.uniforms.uFrequency, 'value').min(0).max(20).step(0.1).name('frequency');
+gui.add(material.uniforms.uLimit, 'value').min(0).max(1).step(0.01).name('limit');
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);
@@ -58,7 +68,17 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
 // Animate
+const clock = new THREE.Clock();
+let lastElapsedTime = clock.getElapsedTime();
+
 const tick = () => {
+  const elapsedTime = clock.getElapsedTime();
+  const deltaElapsedTime = elapsedTime - lastElapsedTime;
+  lastElapsedTime = elapsedTime;
+
+  // Update uniform
+  material.uniforms.uTime.value = elapsedTime;
+
   // Update controls
   controls.update();
 

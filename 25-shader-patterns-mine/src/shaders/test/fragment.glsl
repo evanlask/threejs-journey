@@ -1,6 +1,9 @@
 #define PI 3.1415926535897932384626433832795
 
 varying vec2 vUv;
+varying float vAmplitude;
+varying float vFrequency;
+varying float vLimit;
 
 // Random
 float random(vec2 st) {
@@ -487,7 +490,7 @@ float cnoise(vec2 P) {
 
 // Pattern 50
 void main() {
-    float strength = step(0.9, sin(cnoise(vUv * 10.0) * 20.0));
+    float strength = step(vLimit, sin(cnoise(vUv * vFrequency) * vAmplitude));
 
     vec3 blackColor = vec3(0.0);
     vec3 uvColor = vec3(vUv, 1.0);

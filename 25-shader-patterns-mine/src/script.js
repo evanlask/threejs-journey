@@ -35,6 +35,7 @@ scene.add(axesHelper);
 
 // Geometry
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32);
+// const geometry = new THREE.SphereGeometry(0.5, 32, 32);
 
 // Material
 const material = new THREE.ShaderMaterial({

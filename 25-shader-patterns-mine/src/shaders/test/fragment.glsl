@@ -362,8 +362,18 @@ vec2 rotate(vec2 uv, float rotation, vec2 mid) {
 // }
 
 // Pattern 41
+// void main() {
+//     float angle = atan(vUv.x - 0.5, vUv.y - 0.5);
+//     float strength = angle;
+
+//     gl_FragColor = vec4(vec3(strength), 1.0);
+// }
+
+// Pattern 42
 void main() {
     float angle = atan(vUv.x - 0.5, vUv.y - 0.5);
+    angle /= PI * 2.0;
+    angle += 0.5;
     float strength = angle;
 
     gl_FragColor = vec4(vec3(strength), 1.0);

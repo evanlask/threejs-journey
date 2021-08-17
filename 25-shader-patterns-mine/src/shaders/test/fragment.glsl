@@ -338,17 +338,25 @@ vec2 rotate(vec2 uv, float rotation, vec2 mid) {
 // }
 
 // Pattern 39
-void main() {
-    vec2 wavedUv = vec2(
-        vUv.x + sin(vUv.y * 100.0) * 0.1,
-        vUv.y + sin(vUv.x * 100.0) * 0.1
-    );
+// void main() {
+//     vec2 wavedUv = vec2(
+//         vUv.x + sin(vUv.y * 100.0) * 0.1,
+//         vUv.y + sin(vUv.x * 100.0) * 0.1
+//     );
 
-    float strength = abs(distance(wavedUv, vec2(0.5)) - 0.25);
+//     float strength = abs(distance(wavedUv, vec2(0.5)) - 0.25);
     
-    strength = step(0.01, strength);
+//     strength = step(0.01, strength);
 
-    strength = 1.0 - strength;
+//     strength = 1.0 - strength;
+
+//     gl_FragColor = vec4(vec3(strength), 1.0);
+// }
+
+// Pattern 40
+void main() {
+    float angle = atan(vUv.x, vUv.y);
+    float strength = angle;
 
     gl_FragColor = vec4(vec3(strength), 1.0);
 }

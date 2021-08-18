@@ -48,8 +48,8 @@ gui
   });
 
 // Axes Helper
-const axesHelper = new THREE.AxesHelper(10);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(10);
+// scene.add(axesHelper);
 
 // Geometry
 const waterGeometry = new THREE.PlaneGeometry(25, 25, 2048, 2048);

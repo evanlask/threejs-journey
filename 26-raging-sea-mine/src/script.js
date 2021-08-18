@@ -7,12 +7,12 @@ import './style.css';
 import waterVertexShader from './shaders/water/vertex.glsl';
 import waterFragmentShader from './shaders/water/fragment.glsl';
 
-// Debug
+// debugObject
 const gui = new dat.GUI({
   width: 400,
 });
 
-const debug = {};
+const debugObject = {};
 
 // Dimensions
 const size = {
@@ -33,27 +33,37 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const scene = new THREE.Scene();
 
 // Fog
-// debug.colorFog = '#262837';
-// renderer.setClearColor(debug.colorFog);
-// const fog = new THREE.Fog(debug.colorFog, 1, 5);
-// scene.fog = fog;
+debugObject.colorFog = '#739bc3';
+
+const fog = new THREE.Fog(debugObject.colorFog, 1, 10);
+scene.fog = fog;
+renderer.setClearColor(scene.fog.color);
+
+gui
+  .addColor(debugObject, 'colorFog')
+  .name('colorFog')
+  .onChange((value) => {
+    scene.fog.color = new THREE.Color(value);
+    renderer.setClearColor(scene.fog.color);
+  });
 
 // Axes Helper
 const axesHelper = new THREE.AxesHelper(10);
 scene.add(axesHelper);
 
 // Geometry
-const waterGeometry = new THREE.PlaneGeometry(20, 20, 2048, 2048);
+const waterGeometry = new THREE.PlaneGeometry(25, 25, 2048, 2048);
 
 // Color
-debug.colorDepth = '#186691';
-debug.colorSurface = '#9bd8ff';
+debugObject.colorDepth = '#186691';
+debugObject.colorSurface = '#9bd8ff';
 
 // Material
 const waterMaterial = new THREE.ShaderMaterial({
   vertexShader: waterVertexShader,
   fragmentShader: waterFragmentShader,
-  side: THREE.DoubleSide,
+  fog: true,
+  wireframe: false,
   uniforms: {
     uTime: { value: 0 },
 
@@ -69,12 +79,19 @@ const waterMaterial = new THREE.ShaderMaterial({
     uSmallWavesIterations: { value: 4.0 },
 
     // Color
-    uColorDepth: { value: new THREE.Color(debug.colorDepth) },
-    uColorSurface: { value: new THREE.Color(debug.colorSurface) },
+    uColorDepth: { value: new THREE.Color(debugObject.colorDepth) },
+    uColorSurface: { value: new THREE.Color(debugObject.colorSurface) },
     uColorOffset: { value: 0.12 },
     uColorMultiplier: { value: 4.2 },
+
+    // Fog
+    fogColor: { value: scene.fog.color },
+    fogNear: { value: scene.fog.near },
+    fogFar: { value: scene.fog.far },
   },
 });
+
+gui.add(waterMaterial, 'wireframe');
 
 // Big Waves
 gui.add(waterMaterial.uniforms.uBigWavesElevation, 'value').min(0).max(1).step(0.001).name('uBigWavesElevation');
@@ -88,13 +105,13 @@ gui.add(waterMaterial.uniforms.uSmallWavesFrequency, 'value').min(0).max(30).ste
 gui.add(waterMaterial.uniforms.uSmallWavesSpeed, 'value').min(0).max(4).step(0.001).name('uSmallWavesSpeed');
 gui.add(waterMaterial.uniforms.uSmallWavesIterations, 'value').min(0).max(10).step(1).name('uSmallWavesIterations');
 
-// Color
+// Wave Color
 gui
-  .addColor(debug, 'colorDepth')
+  .addColor(debugObject, 'colorDepth')
   .name('uColorDepth')
   .onChange((value) => (waterMaterial.uniforms.uColorDepth.value = new THREE.Color(value)));
 gui
-  .addColor(debug, 'colorSurface')
+  .addColor(debugObject, 'colorSurface')
   .name('uColorSurface')
   .onChange((value) => (waterMaterial.uniforms.uColorSurface.value = new THREE.Color(value)));
 gui.add(waterMaterial.uniforms.uColorOffset, 'value').min(0).max(0.5).step(0.001).name('uColorOffset');

@@ -180,11 +180,15 @@ glitchFolder.add(glitchPass, 'goWild');
 
 // RGB Shift
 const shaderPass = new ShaderPass(RGBShiftShader);
+shaderPass.material.uniforms.amount.value = 0.005;
+shaderPass.material.uniforms.angle.value = 0.0;
 shaderPass.enabled = false;
 effectComposer.addPass(shaderPass);
 const rgbShiftFolder = gui.addFolder('RGB Shift Pass');
 rgbShiftFolder.closed = false;
 rgbShiftFolder.add(shaderPass, 'enabled');
+rgbShiftFolder.add(shaderPass.material.uniforms.amount, 'value').name('amount').min(-1).max(1).step(0.001);
+rgbShiftFolder.add(shaderPass.material.uniforms.angle, 'value').name('angle').min(-Math.PI).max(Math.PI).step(0.001);
 
 // Unreal Bloom
 const unrealBloomPass = new UnrealBloomPass();

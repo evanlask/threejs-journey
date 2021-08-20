@@ -160,46 +160,133 @@ effectComposer.setSize(sizes.width, sizes.height);
 const renderPass = new RenderPass(scene, camera);
 effectComposer.addPass(renderPass);
 
+// Dot
 const dotScreenPass = new DotScreenPass();
 dotScreenPass.enabled = false;
 effectComposer.addPass(dotScreenPass);
-const dotFolder = gui.addFolder('Dot');
+const dotFolder = gui.addFolder('Dot Pass');
 dotFolder.closed = false;
 dotFolder.add(dotScreenPass, 'enabled');
 
+// Glitch
 const glitchPass = new GlitchPass();
 glitchPass.enabled = false;
 glitchPass.goWild = false;
 effectComposer.addPass(glitchPass);
-const glitchFolder = gui.addFolder('Glitch');
+const glitchFolder = gui.addFolder('Glitch Pass');
 glitchFolder.closed = false;
 glitchFolder.add(glitchPass, 'enabled');
 glitchFolder.add(glitchPass, 'goWild');
 
+// RGB Shift
 const shaderPass = new ShaderPass(RGBShiftShader);
 shaderPass.enabled = false;
 effectComposer.addPass(shaderPass);
-const rgbShiftFolder = gui.addFolder('RGB Shift');
+const rgbShiftFolder = gui.addFolder('RGB Shift Pass');
 rgbShiftFolder.closed = false;
 rgbShiftFolder.add(shaderPass, 'enabled');
 
+// Unreal Bloom
 const unrealBloomPass = new UnrealBloomPass();
 unrealBloomPass.enabled = false;
 unrealBloomPass.strength = 0.3;
 unrealBloomPass.radius = 1.0;
 unrealBloomPass.threshold = 0.6;
 effectComposer.addPass(unrealBloomPass);
-const unrealBLoomFolder = gui.addFolder('Unreal Bloom');
-unrealBLoomFolder.closed = false;
-unrealBLoomFolder.add(unrealBloomPass, 'enabled');
-unrealBLoomFolder.add(unrealBloomPass, 'strength').min(0).max(3).step(0.001);
-unrealBLoomFolder.add(unrealBloomPass, 'radius').min(0).max(3).step(0.001);
-unrealBLoomFolder.add(unrealBloomPass, 'threshold').min(0).max(1).step(0.001);
+const unrealBloomFolder = gui.addFolder('Unreal Bloom Pass');
+unrealBloomFolder.closed = false;
+unrealBloomFolder.add(unrealBloomPass, 'enabled');
+unrealBloomFolder.add(unrealBloomPass, 'strength').min(0).max(3).step(0.001);
+unrealBloomFolder.add(unrealBloomPass, 'radius').min(0).max(3).step(0.001);
+unrealBloomFolder.add(unrealBloomPass, 'threshold').min(0).max(1).step(0.001);
 
+// Tint
+const TintShader = {
+  uniforms: {
+    tDiffuse: { value: null },
+    uTint: { value: null },
+  },
+  vertexShader: `
+    varying vec2 vUv;
+
+    void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+      vUv = uv;
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D tDiffuse;
+    uniform vec3 uTint;
+
+    varying vec2 vUv;
+
+    void main() {
+      vec4 color = texture2D(tDiffuse, vUv);
+      color.rgb += uTint;
+
+      gl_FragColor = color;
+    }
+  `,
+};
+const tintPass = new ShaderPass(TintShader);
+tintPass.material.uniforms.uTint.value = new THREE.Vector3(0.0, 0.0, 0.0);
+tintPass.enabled = false;
+effectComposer.addPass(tintPass);
+const tintFolder = gui.addFolder('Tint Pass');
+tintFolder.closed = false;
+tintFolder.add(tintPass, 'enabled');
+tintFolder.add(tintPass.material.uniforms.uTint.value, 'x').min(-1).max(1).step('0.001').name('red');
+tintFolder.add(tintPass.material.uniforms.uTint.value, 'y').min(-1).max(1).step('0.001').name('green');
+tintFolder.add(tintPass.material.uniforms.uTint.value, 'z').min(-1).max(1).step('0.001').name('blue');
+
+// Displacement
+const DisplacementShader = {
+  uniforms: {
+    tDiffuse: { value: null },
+    uNormalMap: { value: null },
+  },
+  vertexShader: `
+    varying vec2 vUv;
+
+    void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+      vUv = uv;
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D tDiffuse;
+    uniform sampler2D uNormalMap;
+
+    varying vec2 vUv;
+
+    void main() {
+      vec3 normalColor = texture2D(uNormalMap, vUv).xyz * 2.0 - 1.0;
+      vec2 newUv = vUv + normalColor.xy * 0.1;
+      vec4 color = texture2D(tDiffuse, newUv);
+
+      vec3 lightDirection = normalize(vec3(-1.0, 1.0, 0.0));
+      float lightness = clamp(dot(normalColor, lightDirection), 0.0, 1.0);
+      color.rgb += lightness * 2.0;
+
+      gl_FragColor = color;
+    }
+  `,
+};
+const displacementPass = new ShaderPass(DisplacementShader);
+displacementPass.material.uniforms.uNormalMap.value = textureLoader.load('/textures/interfaceNormalMap.png');
+displacementPass.enabled = false;
+effectComposer.addPass(displacementPass);
+const displacementFolder = gui.addFolder('Displacement Pass');
+displacementFolder.closed = false;
+displacementFolder.add(displacementPass, 'enabled');
+
+// SMAA
 const smaaPass = new SMAAPass();
 smaaPass.enabled = useSMAAPass;
 effectComposer.addPass(smaaPass);
-const smaaFolder = gui.addFolder('SMAA');
+const smaaFolder = gui.addFolder('SMAA Pass');
 smaaFolder.closed = false;
 smaaFolder.add(smaaPass, 'enabled');
 

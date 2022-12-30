@@ -8,6 +8,7 @@ import {
   AccumulativeShadows,
   BakeShadows,
   ContactShadows,
+  Environment,
   OrbitControls,
   RandomizedLight,
   Sky,
@@ -39,9 +40,22 @@ export default function Experience() {
     },
   });
 
-  const { sunPosition } = useControls('Sky', {
-    sunPosition: {
-      value: [1, 2, 3],
+  // const { sunPosition } = useControls('Sky', {
+  //   sunPosition: {
+  //     value: [1, 2, 3],
+  //   },
+  // });
+
+  const { envMapIntensity, envMapPreset } = useControls('Environment Map', {
+    envMapIntensity: {
+      value: 1.7,
+      min: 0,
+      max: 12,
+      step: 0.01,
+    },
+    envMapPreset: {
+      options: ['sunset', 'dawn', 'night', 'warehouse', 'forest', 'apartment', 'studio', 'city', 'park', 'lobby'],
+      value: 'apartment',
     },
   });
 
@@ -103,7 +117,7 @@ export default function Experience() {
         shadow-camera-left={-2}
         shadow-mapSize={[1024, 1024]}
       />*/}
-      <directionalLight
+      {/*<directionalLight
         intensity={1.5}
         position={sunPosition}
         ref={directionalLight}
@@ -112,18 +126,32 @@ export default function Experience() {
         shadow-camera-far={10}
         shadow-mapSize={[1024, 1024]}
       />
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={0.5} />*/}
 
-      <Sky sunPosition={sunPosition} />
+      {/*<Sky sunPosition={sunPosition} />*/}
+
+      <Environment background preset={envMapPreset} />
+      {/*<Environment background files={'./environmentMAPS/hilly_terrain_01_puresky_4k.hdr'} />*/}
+      {/*<Environment
+        background
+        files={[
+          './environmentMAPS/2/px.jpg',
+          './environmentMAPS/2/nx.jpg',
+          './environmentMAPS/2/py.jpg',
+          './environmentMAPS/2/ny.jpg',
+          './environmentMAPS/2/pz.jpg',
+          './environmentMAPS/2/nz.jpg',
+        ]}
+      />*/}
 
       <mesh castShadow position-x={-2}>
         <sphereGeometry />
-        <meshStandardMaterial color="orange" />
+        <meshStandardMaterial color="orange" envMapIntensity={envMapIntensity} />
       </mesh>
 
       <mesh castShadow position-x={2} ref={cube} scale={1.5}>
         <boxGeometry />
-        <meshStandardMaterial color="mediumpurple" />
+        <meshStandardMaterial color="mediumpurple" envMapIntensity={envMapIntensity} />
       </mesh>
 
       {/*<mesh position-y={-1} receiveShadow rotation-x={-Math.PI * 0.5} scale={10}>
@@ -132,7 +160,7 @@ export default function Experience() {
       </mesh>*/}
       <mesh position-y={-1} rotation-x={-Math.PI * 0.5} scale={10}>
         <planeGeometry />
-        <meshStandardMaterial color="greenyellow" />
+        <meshStandardMaterial color="greenyellow" envMapIntensity={envMapIntensity} />
       </mesh>
     </>
   );

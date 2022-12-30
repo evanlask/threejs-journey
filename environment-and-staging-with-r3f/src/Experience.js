@@ -10,6 +10,7 @@ import {
   ContactShadows,
   OrbitControls,
   RandomizedLight,
+  Sky,
 } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 
@@ -24,7 +25,7 @@ import { useFrame } from '@react-three/fiber';
 export default function Experience() {
   const { blur, color, opacity } = useControls('Contact Shadows', {
     blur: {
-      value: 1.0,
+      value: 2.6,
       min: 0,
       max: 10,
       step: 0.01,
@@ -35,6 +36,12 @@ export default function Experience() {
       min: 0,
       max: 1,
       step: 0.01,
+    },
+  });
+
+  const { sunPosition } = useControls('Sky', {
+    sunPosition: {
+      value: [1, 2, 3],
     },
   });
 
@@ -98,7 +105,7 @@ export default function Experience() {
       />*/}
       <directionalLight
         intensity={1.5}
-        position={[1, 2, 3]}
+        position={sunPosition}
         ref={directionalLight}
         castShadow
         shadow-camera-near={1}
@@ -106,6 +113,8 @@ export default function Experience() {
         shadow-mapSize={[1024, 1024]}
       />
       <ambientLight intensity={0.5} />
+
+      <Sky sunPosition={sunPosition} />
 
       <mesh castShadow position-x={-2}>
         <sphereGeometry />

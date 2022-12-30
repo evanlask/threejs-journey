@@ -1,34 +1,97 @@
-import { useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import { useRef } from 'react';
+import * as THREE from 'three';
 import { Perf } from 'r3f-perf';
+import { useRef } from 'react';
+import {
+  softShadows,
+  useHelper,
+  AccumulativeShadows,
+  BakeShadows,
+  OrbitControls,
+  RandomizedLight,
+} from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+
+// softShadows({
+//   frustum: 3.75,
+//   size: 0.005,
+//   near: 9.5,
+//   samples: 17,
+//   rings: 11,
+// });
 
 export default function Experience() {
   const cube = useRef();
+  const directionalLight = useRef();
+
+  // useHelper(directionalLight, THREE.DirectionalLightHelper, 1);
 
   useFrame((state, delta) => {
+    const time = state.clock.elapsedTime;
+
     cube.current.rotation.y += delta * 0.2;
+    cube.current.position.x = 2 + Math.sin(time);
   });
 
   return (
     <>
       <Perf position="top-left" />
 
+      {/*<BakeShadows />*/}
+
       <OrbitControls makeDefault />
 
-      <directionalLight position={[1, 2, 3]} intensity={1.5} />
+      <color args={['ivory']} attach="background" />
+
+      <AccumulativeShadows
+        blend={100}
+        color="#316d39"
+        frames={Infinity}
+        opacity={0.8}
+        position={[0, -0.99, 0]}
+        scale={10}
+        temporal
+      >
+        <RandomizedLight ambient={0.5} amount={8} bias={0.0001} intensity={1} position={[1, 2, 3]} radius={1} />
+      </AccumulativeShadows>
+
+      {/*<directionalLight
+        intensity={1.5}
+        position={[1, 2, 3]}
+        ref={directionalLight}
+        castShadow
+        shadow-camera-near={1}
+        shadow-camera-far={10}
+        shadow-camera-top={2}
+        shadow-camera-right={2}
+        shadow-camera-bottom={-2}
+        shadow-camera-left={-2}
+        shadow-mapSize={[1024, 1024]}
+      />*/}
+      <directionalLight
+        intensity={1.5}
+        position={[1, 2, 3]}
+        ref={directionalLight}
+        castShadow
+        shadow-camera-near={1}
+        shadow-camera-far={10}
+        shadow-mapSize={[1024, 1024]}
+      />
       <ambientLight intensity={0.5} />
 
-      <mesh position-x={-2}>
+      <mesh castShadow position-x={-2}>
         <sphereGeometry />
         <meshStandardMaterial color="orange" />
       </mesh>
 
-      <mesh ref={cube} position-x={2} scale={1.5}>
+      <mesh castShadow position-x={2} ref={cube} scale={1.5}>
         <boxGeometry />
         <meshStandardMaterial color="mediumpurple" />
       </mesh>
 
+      {/*<mesh position-y={-1} receiveShadow rotation-x={-Math.PI * 0.5} scale={10}>
+        <planeGeometry />
+        <meshStandardMaterial color="greenyellow" />
+      </mesh>*/}
       <mesh position-y={-1} rotation-x={-Math.PI * 0.5} scale={10}>
         <planeGeometry />
         <meshStandardMaterial color="greenyellow" />

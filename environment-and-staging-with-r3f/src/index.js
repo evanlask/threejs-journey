@@ -1,7 +1,9 @@
-import './style.css';
 import ReactDOM from 'react-dom/client';
 import { Canvas } from '@react-three/fiber';
+
 import Experience from './Experience.js';
+
+import './style.css';
 
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 
@@ -13,6 +15,7 @@ root.render(
       far: 200,
       position: [-4, 3, 6],
     }}
+    shadows
   >
     <Experience />
   </Canvas>

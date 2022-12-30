@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { extend, useFrame, useThree } from '@react-three/fiber';
+import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import CustomObject from './CustomObject';
@@ -15,6 +16,12 @@ const Experience = () => {
   useFrame((state, delta) => {
     // groupRef.current.rotation.y += delta;
     boxRef.current.rotation.y += delta;
+
+    // const angle = state.clock.elapsedTime;
+    // state.camera.position.x = Math.sin(angle) * 8;
+    // state.camera.position.y = (Math.sin(angle) + 1) * 2;
+    // state.camera.position.z = Math.cos(angle) * 8;
+    // state.camera.lookAt(0, 0, 0);
   });
 
   const wireframe = false;
@@ -41,7 +48,7 @@ const Experience = () => {
       </group>
       <mesh position-y={-1} rotation-x={-Math.PI * 0.5} scale={10}>
         <planeGeometry />
-        <meshStandardMaterial color="greenyellow" wireframe={wireframe} />
+        <meshStandardMaterial color="greenyellow" side={THREE.DoubleSide} wireframe={wireframe} />
       </mesh>
     </>
   );

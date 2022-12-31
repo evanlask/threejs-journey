@@ -54,7 +54,19 @@ export default function Experience() {
       step: 0.01,
     },
     envMapPreset: {
-      options: ['sunset', 'dawn', 'night', 'warehouse', 'forest', 'apartment', 'studio', 'city', 'park', 'lobby'],
+      options: [
+        'none',
+        'sunset',
+        'dawn',
+        'night',
+        'warehouse',
+        'forest',
+        'apartment',
+        'studio',
+        'city',
+        'park',
+        'lobby',
+      ],
       value: 'apartment',
     },
   });
@@ -130,7 +142,18 @@ export default function Experience() {
 
       {/*<Sky sunPosition={sunPosition} />*/}
 
-      <Environment background preset={envMapPreset} />
+      <Environment background preset={envMapPreset === 'none' ? undefined : envMapPreset}>
+        {envMapPreset === 'none' && (
+          <>
+            <color args={['black']} attach="background" />
+            <mesh position-z={[-5]} scale={10}>
+              <planeGeometry />
+              <meshBasicMaterial color="red" />
+            </mesh>
+          </>
+        )}
+      </Environment>
+
       {/*<Environment background files={'./environmentMAPS/hilly_terrain_01_puresky_4k.hdr'} />*/}
       {/*<Environment
         background

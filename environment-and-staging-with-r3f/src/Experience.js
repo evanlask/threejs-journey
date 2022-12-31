@@ -67,7 +67,7 @@ export default function Experience() {
         'park',
         'lobby',
       ],
-      value: 'apartment',
+      value: 'none',
     },
   });
 
@@ -148,7 +148,7 @@ export default function Experience() {
             <color args={['black']} attach="background" />
             <mesh position-z={[-5]} scale={10}>
               <planeGeometry />
-              <meshBasicMaterial color="red" />
+              <meshBasicMaterial color={[100, 0, 0]} />
             </mesh>
           </>
         )}

@@ -9,6 +9,7 @@ import {
   BakeShadows,
   ContactShadows,
   Environment,
+  Lightformer,
   OrbitControls,
   RandomizedLight,
   Sky,
@@ -146,10 +147,11 @@ export default function Experience() {
         {envMapPreset === 'none' && (
           <>
             <color args={['black']} attach="background" />
-            <mesh position-z={[-5]} scale={10}>
+            <Lightformer color="red" form="ring" intensity={10} position-z={[-5]} scale={5} />
+            {/*<mesh position-z={[-5]} scale={10}>
               <planeGeometry />
               <meshBasicMaterial color={[100, 0, 0]} />
-            </mesh>
+            </mesh>*/}
           </>
         )}
       </Environment>
@@ -169,12 +171,12 @@ export default function Experience() {
 
       <mesh castShadow position-x={-2}>
         <sphereGeometry />
-        <meshStandardMaterial color="orange" envMapIntensity={envMapIntensity} />
+        <meshStandardMaterial color="orange" envMapIntensity={envMapIntensity} roughness={0.1} />
       </mesh>
 
       <mesh castShadow position-x={2} ref={cube} scale={1.5}>
         <boxGeometry />
-        <meshStandardMaterial color="mediumpurple" envMapIntensity={envMapIntensity} />
+        <meshStandardMaterial color="mediumpurple" envMapIntensity={envMapIntensity} roughness={0.5} />
       </mesh>
 
       {/*<mesh position-y={-1} receiveShadow rotation-x={-Math.PI * 0.5} scale={10}>

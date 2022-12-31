@@ -56,7 +56,7 @@ export default function Experience() {
     },
     envMapPreset: {
       options: [
-        'none',
+        'lightformer',
         'sunset',
         'dawn',
         'night',
@@ -68,7 +68,7 @@ export default function Experience() {
         'park',
         'lobby',
       ],
-      value: 'none',
+      value: 'lightformer',
     },
   });
 
@@ -143,8 +143,8 @@ export default function Experience() {
 
       {/*<Sky sunPosition={sunPosition} />*/}
 
-      <Environment background preset={envMapPreset === 'none' ? undefined : envMapPreset}>
-        {envMapPreset === 'none' && (
+      <Environment background preset={envMapPreset === 'lightformer' ? undefined : envMapPreset} resolution={2048}>
+        {envMapPreset === 'lightformer' && (
           <>
             <color args={['black']} attach="background" />
             <Lightformer color="red" form="ring" intensity={10} position-z={[-5]} scale={5} />

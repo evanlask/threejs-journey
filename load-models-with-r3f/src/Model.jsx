@@ -1,7 +1,7 @@
 import { useGLTF, Clone } from '@react-three/drei';
 
 const Model = () => {
-  const model = useGLTF('./hamburger.glb');
+  const model = useGLTF('./hamburger-draco.glb');
 
   return (
     <>
@@ -12,6 +12,6 @@ const Model = () => {
   );
 };
 
-useGLTF.preload('./hamburger.glb');
+useGLTF.preload('./hamburger-draco.glb');
 
 export default Model;

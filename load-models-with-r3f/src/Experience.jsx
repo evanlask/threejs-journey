@@ -2,6 +2,7 @@ import { Perf } from 'r3f-perf';
 import { Suspense } from 'react';
 import { OrbitControls } from '@react-three/drei';
 
+import Fox from './Fox';
 import Hamburger from './Hamburger';
 import Model from './Model';
 import Placeholder from './Placeholder';
@@ -24,6 +25,8 @@ export default function Experience() {
       <Suspense fallback={<Placeholder position-y={0.5} scale={2} />}>
         <Hamburger scale={0.35} />
       </Suspense>
+
+      <Fox />
     </>
   );
 }

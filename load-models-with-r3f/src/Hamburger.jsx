@@ -32,6 +32,6 @@ const Hamburger = (props) => {
   );
 };
 
-useGLTF.preload('/hamburger-draco.glb');
+useGLTF.preload('./hamburger-draco.glb');
 
 export default Hamburger;

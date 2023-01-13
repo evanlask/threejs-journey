@@ -1,16 +1,9 @@
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { useLoader } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 
 const Model = () => {
-  const model = useLoader(GLTFLoader, './FlightHelmet/glTF/FlightHelmet.gltf', (loader) => {
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('./draco/');
+  const model = useGLTF('./hamburger.glb');
 
-    loader.setDRACOLoader(dracoLoader);
-  });
-
-  return <primitive object={model.scene} scale={5} position-y={-1} />;
+  return <primitive object={model.scene} scale={0.35} />;
 };
 
 export default Model;

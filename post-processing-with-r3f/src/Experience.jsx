@@ -1,11 +1,16 @@
 import { useControls } from 'leva';
 import { BlendFunction, GlitchMode } from 'postprocessing';
+import { useRef } from 'react';
 import { Perf } from 'r3f-perf';
 import { OrbitControls } from '@react-three/drei';
 import { Bloom, DepthOfField, EffectComposer, Glitch, Noise, SSR, Vignette } from '@react-three/postprocessing';
 
+import { Drunk } from './Drunk';
+
 export default function Experience() {
-  const ssrProps = useControls({
+  const drunkRef = useRef();
+
+  /*const ssrProps = useControls({
     temporalResolve: true,
     STRETCH_MISSED_RAYS: true,
     USE_MRT: true,
@@ -34,6 +39,19 @@ export default function Experience() {
     maxDepth: { value: 1, min: 0, max: 1 },
     thickness: { value: 10, min: 0, max: 10 },
     ior: { value: 1.45, min: 0, max: 2 },
+  });*/
+
+  const drunkProps = useControls('Drunk Effect', {
+    amplitude: {
+      value: 0.1,
+      min: 0,
+      max: 1,
+    },
+    frequency: {
+      value: 10,
+      min: 1,
+      max: 20,
+    },
   });
 
   return (
@@ -46,7 +64,8 @@ export default function Experience() {
         {/*<Noise blendFunction={BlendFunction.SOFT_LIGHT} premultiply />*/}
         {/*<Bloom intensity={1} luminanceThreshold={1} mipmapBlur />*/}
         {/*<DepthOfField bokehScale={6} focalLength={0.025} focusDistance={0.025} />*/}
-        <SSR {...ssrProps} />
+        {/*<SSR {...ssrProps} />*/}
+        <Drunk ref={drunkRef} {...drunkProps} />
       </EffectComposer>
 
       <Perf position="top-left" />

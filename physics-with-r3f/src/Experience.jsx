@@ -58,13 +58,13 @@ export default function Experience() {
     twister.current.setNextKinematicRotation(quaternionRotation);
     twister.current.setNextKinematicTranslation({
       x: x,
-      y: -0.8,
+      y: 1,
       z: y,
     });
   });
 
   const cubes = useRef();
-  const cubeCount = 600;
+  const cubeCount = 2000;
 
   // useEffect(() => {
   //   for (let i = 0; i < cubeCount; i++) {
@@ -85,9 +85,9 @@ export default function Experience() {
 
     for (let i = 0; i < cubeCount; i++) {
       positions.push([
-        (Math.random() - 0.5) * 6, //
-        6 + i * 0.5,
-        (Math.random() - 0.5) * 6,
+        (Math.random() - 0.5) * 5, //
+        5 + i * 0.4,
+        (Math.random() - 0.5) * 5,
       ]);
 
       rotations.push([
@@ -147,7 +147,7 @@ export default function Experience() {
           <CuboidCollider args={[0.5, 0.5, 0.5]} mass={5} />
         </RigidBody>
 
-        <RigidBody friction={0} position={[0, -0.8, 0]} ref={twister} type="kinematicPosition">
+        <RigidBody friction={0} position={[0, 1, 0]} ref={twister} type="kinematicPosition">
           <mesh cashShadow scale={[0.4, 0.4, 4]}>
             <boxGeometry />
             <meshStandardMaterial color="red" />
@@ -165,17 +165,17 @@ export default function Experience() {
         */}
 
         <RigidBody friction={0.7} type="fixed">
-          <mesh receiveShadow position-y={-1.25}>
-            <boxGeometry args={[10, 0.5, 10]} />
+          <mesh receiveShadow position-y={-1.5}>
+            <boxGeometry args={[10, 1, 10]} />
             <meshStandardMaterial color="greenyellow" />
           </mesh>
         </RigidBody>
 
         <RigidBody type="fixed">
-          <CuboidCollider args={[5, 2, 0.5]} position={[0, 1, 5.5]} />
-          <CuboidCollider args={[5, 2, 0.5]} position={[0, 1, -5.5]} />
-          <CuboidCollider args={[0.5, 2, 5]} position={[5.5, 1, 0]} />
-          <CuboidCollider args={[0.5, 2, 5]} position={[-5.5, 1, 0]} />
+          <CuboidCollider args={[5, 5, 0.5]} position={[0, 3, 5.5]} />
+          <CuboidCollider args={[5, 5, 0.5]} position={[0, 3, -5.5]} />
+          <CuboidCollider args={[0.5, 5, 5]} position={[5.5, 3, 0]} />
+          <CuboidCollider args={[0.5, 5, 5]} position={[-5.5, 3, 0]} />
         </RigidBody>
 
         <RigidBody colliders={false} position={[0, 5, 0]}>

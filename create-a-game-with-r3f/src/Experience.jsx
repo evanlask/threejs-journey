@@ -11,7 +11,7 @@ export default function Experience() {
       <Physics>
         <Debug />
         <Lights />
-        <Level count={2} types={[BlockAxe, BlockLimbo, BlockSpinner]} />
+        <Level count={7} types={[BlockAxe, BlockLimbo, BlockSpinner]} />
         <Player />
       </Physics>
     </>

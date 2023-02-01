@@ -200,7 +200,7 @@ const Bounds = ({ length = 1 }) => {
         <mesh
           geometry={boxGeometry}
           material={wallMaterial}
-          position={[0, 0.7, -(length * 4) + 2]}
+          position={[0, 0.75, -(length * 4) + 2]}
           receiveShadow
           scale={[4, 1.5, 0.3]}
         />

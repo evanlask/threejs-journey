@@ -1,4 +1,4 @@
-export default function Lights() {
+export const Lights = () => {
   return (
     <>
       <directionalLight
@@ -16,4 +16,4 @@ export default function Lights() {
       <ambientLight intensity={0.5} />
     </>
   );
-}
+};

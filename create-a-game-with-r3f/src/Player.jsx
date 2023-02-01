@@ -1,15 +1,49 @@
 import { useKeyboardControls } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { RigidBody } from '@react-three/rapier';
-import { useMemo, useRef } from 'react';
+import { useRapier, RigidBody } from '@react-three/rapier';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 export const Player = () => {
   const body = useRef();
 
+  const smoothedCamera = useRef({
+    target: new THREE.Vector3(),
+    position: new THREE.Vector3(10, 10, 10),
+  });
+
+  const { rapier, world } = useRapier();
   const [subscribeKeys, getKeys] = useKeyboardControls();
 
+  const jump = () => {
+    const origin = body.current.translation();
+    origin.y -= 0.31; // TODO: ball radius no magic numbers
+    const direction = { x: 0, y: -1, z: 0 };
+    const ray = new rapier.Ray(origin, direction);
+    const hit = world.raw().castRay(ray, 10, true);
+
+    if (hit && hit.toi < 0.15) {
+      body.current.applyImpulse({ x: 0, y: 0.5, z: 0 });
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribeJump = subscribeKeys(
+      (state) => state.jump,
+      (value) => {
+        if (value === true) {
+          jump();
+        }
+      }
+    );
+
+    return () => {
+      unsubscribeJump();
+    };
+  }, []);
+
   useFrame((state, delta) => {
+    // Controls
     const { forward, rightward, backward, leftward } = getKeys();
 
     const impulse = { x: 0, y: 0, z: 0 };
@@ -40,10 +74,38 @@ export const Player = () => {
 
     body.current.applyImpulse(impulse);
     body.current.applyTorqueImpulse(torque);
+
+    // Follow camera
+    const bodyPosition = body.current.translation();
+
+    const cameraPosition = new THREE.Vector3();
+    cameraPosition.copy(bodyPosition);
+    cameraPosition.z += 2.25;
+    cameraPosition.y += 0.65;
+
+    const cameraTarget = new THREE.Vector3();
+    cameraTarget.copy(bodyPosition);
+    cameraTarget.y += 0.25;
+
+    const { position, target } = smoothedCamera.current;
+
+    position.lerp(cameraPosition, 5 * delta);
+    target.lerp(cameraTarget, 5 * delta);
+
+    state.camera.position.copy(position);
+    state.camera.lookAt(target);
   });
 
   return (
-    <RigidBody colliders="ball" friction={1} position={[0, 1, 0]} ref={body} restitution={0.2}>
+    <RigidBody
+      angularDamping={0.5}
+      colliders="ball"
+      friction={1}
+      linearDamping={0.5}
+      position={[0, 1, 0]}
+      ref={body}
+      restitution={0.2}
+    >
       <mesh castShadow>
         <icosahedronGeometry args={[0.3, 1]} />
         <meshStandardMaterial color="mediumpurple" flatShading />

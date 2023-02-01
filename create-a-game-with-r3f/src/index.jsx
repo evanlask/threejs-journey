@@ -2,7 +2,8 @@ import { KeyboardControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import ReactDOM from 'react-dom/client';
 
-import Experience from './Experience.jsx';
+import Experience from './Experience';
+import { Interface } from './Interface';
 
 import './style.css';
 
@@ -29,5 +30,6 @@ root.render(
     >
       <Experience />
     </Canvas>
+    <Interface />
   </KeyboardControls>
 );

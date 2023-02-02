@@ -4,6 +4,8 @@ import { useRapier, RigidBody } from '@react-three/rapier';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
+import { useGame } from './stores/useGame';
+
 export const Player = () => {
   const body = useRef();
 
@@ -11,6 +13,11 @@ export const Player = () => {
     target: new THREE.Vector3(),
     position: new THREE.Vector3(10, 10, 10),
   });
+
+  const blockCount = useGame((state) => state.blockCount);
+  const end = useGame((state) => state.end);
+  const restart = useGame((state) => state.restart);
+  const start = useGame((state) => state.start);
 
   const { rapier, world } = useRapier();
   const [subscribeKeys, getKeys] = useKeyboardControls();
@@ -27,7 +34,17 @@ export const Player = () => {
     }
   };
 
+  const reset = () => {
+    body.current.setTranslation({ x: 0, y: 1, z: 0 });
+    body.current.setLinvel({ x: 0, y: 0, z: 0 });
+    body.current.setAngvel({ x: 0, y: 0, z: 0 });
+  };
+
   useEffect(() => {
+    const unsubscribeAny = subscribeKeys(() => {
+      start();
+    });
+
     const unsubscribeJump = subscribeKeys(
       (state) => state.jump,
       (value) => {
@@ -37,8 +54,19 @@ export const Player = () => {
       }
     );
 
+    const unsubscribeReset = useGame.subscribe(
+      (state) => state.phase,
+      (phase) => {
+        if (phase === 'ready') {
+          reset();
+        }
+      }
+    );
+
     return () => {
+      unsubscribeAny();
       unsubscribeJump();
+      unsubscribeReset();
     };
   }, []);
 
@@ -89,11 +117,20 @@ export const Player = () => {
 
     const { position, target } = smoothedCamera.current;
 
-    position.lerp(cameraPosition, 5 * delta);
-    target.lerp(cameraTarget, 5 * delta);
+    position.lerp(cameraPosition, 10 * delta);
+    target.lerp(cameraTarget, 10 * delta);
 
     state.camera.position.copy(position);
     state.camera.lookAt(target);
+
+    // Phases
+    if (bodyPosition.z < -(blockCount * 4 + 2)) {
+      end();
+    }
+
+    if (bodyPosition.y < -5) {
+      restart();
+    }
   });
 
   return (

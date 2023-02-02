@@ -13,9 +13,9 @@ root.render(
   <KeyboardControls
     map={[
       { name: 'forward', keys: ['ArrowUp', 'KeyW'] },
+      { name: 'rightward', keys: ['ArrowRight', 'KeyD'] },
       { name: 'backward', keys: ['ArrowDown', 'KeyS'] },
       { name: 'leftward', keys: ['ArrowLeft', 'KeyA'] },
-      { name: 'rightward', keys: ['ArrowRight', 'KeyD'] },
       { name: 'jump', keys: ['Space'] },
     ]}
   >

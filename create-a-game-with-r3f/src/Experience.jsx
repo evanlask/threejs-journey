@@ -3,6 +3,7 @@ import { Debug, Physics } from '@react-three/rapier';
 
 import { useGame } from './stores/useGame';
 
+import { Effects } from './Effects';
 import { BlockAxe, BlockLimbo, BlockSpinner, Level } from './Level';
 import { Lights } from './Lights';
 import { Player } from './Player';
@@ -13,11 +14,13 @@ export default function Experience() {
 
   return (
     <>
-      <color args={['#bdedfc']} attach="background" />
+      <color args={['#252731']} attach="background" />
+
+      <Lights />
+      <Effects />
 
       <Physics>
-        <Debug />
-        <Lights />
+        {/*<Debug />*/}
         <Level count={blockCount} seed={blockSeed} types={[BlockAxe, BlockLimbo, BlockSpinner]} />
         <Player />
       </Physics>

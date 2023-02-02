@@ -1,4 +1,4 @@
-import { useGLTF } from '@react-three/drei';
+import { useGLTF, Float, Text } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import { useMemo, useRef } from 'react';
@@ -62,6 +62,13 @@ const BlockEnd = ({ position = [0, 0, 0] }) => {
 
   return (
     <group position={position}>
+      {/* Title */}
+
+      <Text font="./bebas-neue-v9-latin-regular.woff" position={[0, 2, 0]} scale={1}>
+        FINISH
+        <meshBasicMaterial toneMapped={false} />
+      </Text>
+
       {/* Floor */}
       <mesh geometry={boxGeometry} material={floor1Material} position={[0, -0, 0]} receiveShadow scale={[4, 0.2, 4]} />
 
@@ -118,6 +125,22 @@ export const BlockLimbo = ({ position = [0, 0, 0] }) => {
 const BlockStart = ({ position = [0, 0, 0] }) => {
   return (
     <group position={position}>
+      {/* Title */}
+      <Float floatIntensity={0.25} rotationIntensity={0.25}>
+        <Text
+          font="./bebas-neue-v9-latin-regular.woff"
+          lineHeight={0.75}
+          maxWidth={0.25}
+          position={[0.75, 0.65, 0]}
+          rotation-y={-0.25}
+          scale={0.5}
+          textAlign="right"
+        >
+          Marble Race
+          <meshBasicMaterial toneMapped={false} />
+        </Text>
+      </Float>
+
       {/* Floor */}
       <mesh
         geometry={boxGeometry}
